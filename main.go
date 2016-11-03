@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/url"
 	"net/http"
 	"io/ioutil"
@@ -41,7 +40,23 @@ func sendsms( mobile string, content string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%s", result)
+	//fmt.Printf("%s", result)
+        //fmt.Printf(string(result))
+
+	fileName := "/tmp/a.log"
+	logFile,err  := os.Create(fileName)
+        defer logFile.Close()
+        if err != nil {
+         log.Fatalln("open file error !")
+        }
+         //创建一个日志对象
+        debugLog := log.New(logFile,"[Debug]",log.LstdFlags)
+        //配置一个日志格式的前缀
+        debugLog.SetPrefix("[Info]")
+        //配置log的Flag参数
+        debugLog.SetFlags(debugLog.Flags() | log.LstdFlags)
+        debugLog.Println(string(result))
+
 }
 
 func main(){
@@ -54,3 +69,7 @@ func main(){
 
 	sendsms(mobile, content)
 }
+
+//func main()  {
+//	sendsms("11", "测试")
+//}
